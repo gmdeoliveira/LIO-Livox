@@ -84,10 +84,22 @@ void lidarCallBackPc2(const sensor_msgs::PointCloud2ConstPtr &msg) {
 
     lidarFeatureExtractor->FeatureExtract_Mid(laser_cloud_custom, laserConerCloud, laserSurfCloud);
 
-    sensor_msgs::PointCloud2 laserCloudMsg;
-    pcl::toROSMsg(*laser_cloud_custom, laserCloudMsg);
-    laserCloudMsg.header = msg->header;
-    pubFullLaserCloud.publish(laserCloudMsg);
+    sensor_msgs::PointCloud2 laserCloudMsg_custom;
+    pcl::toROSMsg(*laser_cloud_custom, laserCloudMsg_custom);
+    laserCloudMsg_custom.header = msg->header;
+    pubFullLaserCloud.publish(laserCloudMsg_custom);
+
+    //Publish the corner cloud
+    sensor_msgs::PointCloud2 laserCloudMsg_corner;
+    pcl::toROSMsg(*laserConerCloud, laserCloudMsg_corner);
+    laserCloudMsg_corner.header = msg->header;
+    pubSharpCloud.publish(laserCloudMsg_corner);
+
+    //Publish the surface cloud
+    sensor_msgs::PointCloud2 laserCloudMsg_surf;
+    pcl::toROSMsg(*laserSurfCloud, laserCloudMsg_surf);
+    laserCloudMsg_surf.header = msg->header;
+    pubFlatCloud.publish(laserCloudMsg_surf);
 
 }
 
